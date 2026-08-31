@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAPO — romanticize your macros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="pre">
+  <div class="l">Loading your era<br>mapo / 2026</div>
+  <div class="n"><span id="pct">0</span><span>%</span></div>
+  <div class="barline"><div class="barfill" id="preBar"></div></div>
+</div>
+<div class="curtain" id="cTop"></div>
+<div class="curtain" id="cBot"></div>
+
+<!-- FILM HUD -->
+<div class="letterbox" id="lbT"></div>
+<div class="letterbox" id="lbB"></div>
+<div class="hud" id="hudTL"><span class="rec"><i></i>REC</span><span id="tc">00:00:00:00</span></div>
+<div class="hud" id="hudTR">MAPO — ROMANTICIZE YOUR MACROS</div>
+<div class="hud" id="hudBL">NO STARVATION VIBES ALLOWED</div>
+<div class="hud" id="hudBR"><span id="sceneLbl">SC 01 — THE HOOK</span></div>
+<div id="scrub"><div id="scrubFill"></div></div>
+<div id="grain"></div><div id="vig"></div><div id="scan"></div><div id="flash"></div>
+<div id="cRing" data-l="LOOK"></div><div id="cDot"></div>
+
+<!-- LOGIN GATE -->
+<div id="gate" class="ui">
+  <div class="brandside">
+    <canvas id="gateCanvas"></canvas>
+    <div class="tagline">MAPO &nbsp;/&nbsp; 2026</div>
+    <h1>ROMANTICIZE<br>YOUR<br><span>MACROS.</span></h1>
+    <div class="say">Entering our healthy era — without making it our entire personality.</div>
+  </div>
+  <div class="formside">
+    <div class="card">
+      <div class="tagline" id="gKicker">Welcome back</div>
+      <h2 id="gHead">Let's get you fed.</h2>
+      <div class="sub" id="gSub">Sign in and your plate, your week and today's tally all stay with you.</div>
+
+      <button class="gbtn" id="gGoogle">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <div id="gsiSlot"></div>
+
+      <div class="or">or with email</div>
+
+      <div class="fields">
+        <label class="field"><span>Email</span>
+          <input id="gEmail" type="email" placeholder="you@example.com" autocomplete="email"></label>
+        <label class="field"><span>Password</span>
+          <input id="gPass" type="password" placeholder="at least 6 characters" autocomplete="current-password"></label>
+      </div>
+      <div class="err" id="gErr"></div>
+      <div class="row">
+        <button class="btn solid" id="gIn">Sign in</button>
+        <button class="btn ghost" id="gUp">Create account</button>
+      </div>
+      <div class="fine">
+        An account is required — the plan generator, the coach and your log
+        all live behind it<br>
+        Demo build · no password is sent anywhere · everything stays in this browser tab
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="whoami"><span id="whoName"></span><button id="signOut">sign out</button></div>
+
+<audio id="rev" preload="auto" src="assets/bmw_m5_rev.mp3"></audio>
+
+<!-- TODAY TRAY -->
+<button id="trayBtn" class="ui" title="Open today's log">
+  <span class="pop" id="trayPop">+0</span>
+  <span class="ring"><svg width="38" height="38" viewBox="0 0 38 38">
+    <circle class="bg" cx="19" cy="19" r="16"/>
+    <circle class="fg" id="trayRing" cx="19" cy="19" r="16"
+            stroke-dasharray="100.5" stroke-dashoffset="100.5"/>
+  </svg></span>
+  <span class="txt"><b id="trayKc">0 kcal</b><span id="trayNote">today · tap to open</span></span>
+</button>
+
+
+<!-- COACH -->
+<button id="coachBtn" class="ui" title="Ask the coach">
+  <span class="dot"></span>
+  <span class="t"><b>Coach</b><span>hinglish · english</span></span>
+</button>
+<aside id="coach" class="ui" aria-hidden="true">
+  <header>
+    <div class="top">
+      <div>
+        <div class="k">MAPO Coach</div>
+        <h3>Ask me anything.</h3>
+      </div>
+      <button class="x" id="coachClose" aria-label="Close">&#10005;</button>
+    </div>
+    <div class="modesw">
+      <button class="on" data-mode="hinglish">Hinglish</button>
+      <button data-mode="english">English</button>
+    </div>
+  </header>
+  <div id="coachLog"></div>
+  <div class="quick" id="coachQuick"></div>
+  <footer>
+    <input id="coachIn" type="text" placeholder="kya khaun aaj dinner mein?" autocomplete="off">
+    <button id="coachSend">Send</button>
+  </footer>
+</aside>
+
+<!-- SCRIM + DRAWER -->
+<div id="scrim"></div>
+<aside id="drawer" class="ui" aria-hidden="true">
+  <header>
+    <div>
+      <div class="k" id="dwKicker">FOOD</div>
+      <h3 id="dwTitle">—</h3>
+    </div>
+    <button class="x" id="dwClose" aria-label="Close">✕</button>
+  </header>
+  <div class="body" id="dwBody"></div>
+  <footer id="dwFoot"></footer>
+</aside>
+
+<main>
+
+  <!-- ══ SCENE 01 ══ -->
+  <section id="s1" data-scene="SC 01 — THE HOOK">
+    <canvas id="orb"></canvas>
+    <div class="tagline" style="margin-bottom:3vh">MAPO &nbsp;/&nbsp; a nutrition app with a personality &nbsp;/&nbsp; 2026</div>
+    <div class="kin"><b class="chroma" data-t="ROMANTICIZE">ROMANTICIZE</b></div>
+    <div class="kin"><b class="ghost">YOUR</b></div>
+    <div class="kin"><b class="hot">MACROS.</b></div>
+    <div class="foot">
+      <p>Let's romanticize tracking your macros <span class="serif">instead of doomscrolling.</span>
+         Same thumb, better outcome. Tap a plate, see the numbers, log it, move on with your day.</p>
+      <div class="scrollcue">SCROLL TO PLAY <span></span></div>
+    </div>
+  </section>
+
+  <!-- ══ SCENE 02 ══ -->
+  <section id="s2" data-scene="SC 02 — HEALTHY ERA">
+    <div class="wrap">
+      <div>
+        <div class="tagline rv">02 — The vibe</div>
+        <h2 class="scramble rv" data-final="ENTERING OUR&#10;HEALTHY ERA."
+            style="margin-top:20px;white-space:pre-line"></h2>
+        <p class="rv" style="font-family:'Instrument Serif',serif;font-style:italic;
+           font-size:1.35rem;color:var(--bone);line-height:1.5">
+           Without making it our entire personality.</p>
+        <p class="rv">No 5am cold plunge. No spreadsheet that ruins dinner. You get one number
+           to hit, a plate that already knows what dal costs, and permission to stop thinking
+           about it for the rest of the day.</p>
+        <p class="rv">We're keeping it low-key and realistic. <em>No starvation vibes allowed.</em></p>
+      </div>
+      <div class="badge rv">
+        <svg class="spin" viewBox="0 0 200 200">
+          <defs><path id="circ" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs>
+          <text><textPath href="#circ">EAT · LOG · REPEAT · NO GUILT · EAT · LOG · REPEAT · NO GUILT · </textPath></text>
+        </svg>
+        <div class="core"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SCENE 03 : PLATE INDEX ══ -->
+  <section id="s3" data-scene="SC 03 — THE PLATE INDEX">
+    <div class="sticky">
+      <div class="head">
+        <div>
+          <h2>THE PLATE INDEX</h2>
+          <div class="sub">Fibermaxxing and protein-loading: let's secure the gains.</div>
+        </div>
+        <div class="tagline">Tap any plate &nbsp;→&nbsp; log it in two clicks</div>
+      </div>
+      <div class="track" id="track"></div>
+    </div>
+  </section>
+
+  <!-- ══ SCENE 04 : GOALS ══ -->
+  <section id="s4" data-scene="SC 04 — YOUR NUMBERS">
+    <div class="tagline rv">04 — The soft launch of your goals</div>
+    <h2 class="scramble rv" data-final="TELL US YOUR GOALS."
+        style="margin-top:20px;font-size:clamp(2rem,5.4vw,4.6rem)"></h2>
+    <p class="rv" style="font-family:'Instrument Serif',serif;font-style:italic;
+       font-size:1.25rem;color:#a8aab0;margin-top:16px;max-width:560px;line-height:1.5">
+       So we can pretend we're your personal life coach.</p>
+
+    <div class="grid">
+      <div class="form ui rv" id="goalForm">
+        <label class="field"><span>Name</span><input id="fName" type="text" value="" placeholder="what should we call you"></label>
+        <label class="field"><span>Age</span><input id="fAge" type="number" value="24" min="13" max="119"></label>
+        <label class="field"><span>Weight · kg</span><input id="fWeight" type="number" value="70" min="16" max="400" step="0.5"></label>
+        <label class="field"><span>Height · cm</span><input id="fHeight" type="number" value="170" min="60" max="260" step="0.5"></label>
+        <label class="field"><span>Goal weight · kg</span><input id="fTarget" type="number" value="65" min="16" max="400" step="0.5"></label>
+        <label class="field"><span>Gender</span><select id="fGender">
+          <option>Female</option><option selected>Male</option></select></label>
+        <label class="field"><span>How much do you move</span><select id="fAct">
+          <option value="1">Barely · desk life</option>
+          <option value="2" selected>A little · 1–3 days</option>
+          <option value="3">Mid · 3–5 days</option>
+          <option value="4">A lot · 6–7 days</option>
+          <option value="5">Athlete arc</option></select></label>
+        <label class="field"><span>The goal</span><select id="fGoal">
+          <option value="1">Maintain · we're good</option>
+          <option value="3" selected>Lose fat · gently</option>
+          <option value="2">Gain · eat more</option>
+          <option value="4">Recomp · both at once</option></select></label>
+        <label class="field"><span>What you eat</span><select id="fPref">
+          <option value="veg" selected>Vegetarian</option>
+          <option value="egg">Eggetarian</option>
+          <option value="nonveg">Everything</option></select></label>
+        <label class="field"><span>Favourite food — we'll make room</span>
+          <input id="fFav" type="text" list="favlist" autocomplete="off"
+                 placeholder="rajma, dosa, butter chicken…">
+          <datalist id="favlist"></datalist></label>
+        <div class="wide" id="favHint" style="font-family:'JetBrains Mono',monospace;
+             font-size:.54rem;letter-spacing:.2em;color:var(--mute);text-transform:uppercase;
+             min-height:1.2em;margin-top:-6px"></div>
+        <div class="wide" style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn solid" id="calcBtn">Run my numbers</button>
+          <button class="btn ghost" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="readout rv" id="readout">
+        <div class="lock" id="roLock">Your numbers show up here.<br>
+          Nothing is guessed — it's the same BMI, BMR and TDEE maths a dietitian would do,
+          just without the appointment.</div>
+        <div class="bigstat">
+          <span>EAT THIS MUCH TODAY</span>
+          <b id="roTarget">—</b>
+          <em id="roGoal">—</em>
+        </div>
+        <div class="trio">
+          <div><span>BMI</span><b id="roBmi">—</b></div>
+          <div><span>BMR · KCAL</span><b id="roBmr">—</b></div>
+          <div><span>TDEE · KCAL</span><b id="roTdee">—</b></div>
+        </div>
+        <div class="trio">
+          <div><span>PROTEIN · G</span><b id="roP" style="color:var(--saffron)">—</b></div>
+          <div><span>CARBS · G</span><b id="roC" style="color:var(--acid)">—</b></div>
+          <div><span>FAT · G</span><b id="roF" style="color:#ffd93d">—</b></div>
+        </div>
+        <div class="meta" id="roBmiNote"></div>
+        <div class="meta" id="roFav" style="display:none;border-top:1px solid rgba(244,241,232,.14);
+             padding-top:16px;margin-top:18px"></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px">
+          <button class="btn ui" id="toWeekBtn">Build my 7 days</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ RIBBONS ══ -->
+  <div class="ribbons">
+    <div class="rib" id="rib1"></div>
+    <div class="rib" id="rib2"></div>
+  </div>
+
+  <!-- ══ SCENE 05 : 7-DAY PLAN ══ -->
+  <section id="s7" data-scene="SC 05 — THE WEEK">
+    <div class="cap">
+      <div>
+        <div class="tagline">05 — Seven days, one decision</div>
+        <h2>A WEEK YOU'LL<br>ACTUALLY FINISH.</h2>
+      </div>
+      <div class="tagline" style="max-width:280px;line-height:2">Training days eat more.<br>Rest days give it back.<br>The week still adds up.</div>
+    </div>
+
+    <div class="daypick ui">
+      <span class="lab">Training days</span>
+      <button class="dchip on" data-d="0">MON</button>
+      <button class="dchip" data-d="1">TUE</button>
+      <button class="dchip on" data-d="2">WED</button>
+      <button class="dchip" data-d="3">THU</button>
+      <button class="dchip on" data-d="4">FRI</button>
+      <button class="dchip" data-d="5">SAT</button>
+      <button class="dchip" data-d="6">SUN</button>
+    </div>
+
+    <div class="weekbar ui">
+      <button class="btn solid" id="weekBtn">Generate 7-day plan</button>
+      <button class="btn ghost" id="shuffleBtn" disabled>Shuffle dishes</button>
+      <div class="note" id="weekNote">Run your numbers up top first — the week is built on your
+        target, not a template.</div>
+    </div>
+
+    <div class="week" id="week"></div>
+
+    <div class="weektotal" id="weekTotal" style="display:none">
+      <div><span>WEEK TOTAL · KCAL</span><b id="wtKc">—</b></div>
+      <div><span>DAILY AVERAGE</span><b id="wtAvg">—</b></div>
+      <div><span>PROTEIN · G/WEEK</span><b id="wtP" style="color:var(--saffron)">—</b></div>
+      <div><span>CARBS · G/WEEK</span><b id="wtC" style="color:var(--acid)">—</b></div>
+      <div><span>FAT · G/WEEK</span><b id="wtF" style="color:#ffd93d">—</b></div>
+    </div>
+  </section>
+
+  <!-- ══ SCENE 06 : BURGER ANATOMY ══ -->
+  <section id="sB" data-scene="SC 06 — ANATOMY">
+    <div class="corner c1"></div><div class="corner c2"></div>
+    <div class="corner c3"></div><div class="corner c4"></div>
+
+      <div class="cap">
+        <h2>ANATOMY OF A BURGER</h2>
+        <div class="tagline">06 — Tap a layer · no judgement, just numbers</div>
+      </div>
+
+      <div class="stage">
+        <div class="burgerwrap">
+          <svg viewBox="0 0 400 440" id="burger">
+            <g class="steam" id="steam">
+              <path d="M150,10 C132,-8 168,-24 150,-44"/>
+              <path d="M200,2 C182,-16 218,-32 200,-52"/>
+              <path d="M250,10 C232,-8 268,-24 250,-44"/>
+            </g>
+
+            <g class="layer" data-i="0" style="color:#e8a33d">
+              <path d="M40,120 C40,50 118,16 200,16 C282,16 360,50 360,120 L360,133
+                       C360,143 350,151 337,151 L63,151 C50,151 40,143 40,133 Z" fill="#c9822c"/>
+              <path d="M40,120 C40,50 118,16 200,16 C282,16 360,50 360,120
+                       C300,104 100,104 40,120 Z" fill="#e8a33d"/>
+              <ellipse cx="130" cy="70" rx="9" ry="5" fill="#f6e3bd" transform="rotate(-18 130 70)"/>
+              <ellipse cx="196" cy="52" rx="9" ry="5" fill="#f6e3bd" transform="rotate(6 196 52)"/>
+              <ellipse cx="262" cy="72" rx="9" ry="5" fill="#f6e3bd" transform="rotate(20 262 72)"/>
+              <ellipse cx="96"  cy="104" rx="8" ry="4.5" fill="#f6e3bd" transform="rotate(-28 96 104)"/>
+              <ellipse cx="304" cy="104" rx="8" ry="4.5" fill="#f6e3bd" transform="rotate(28 304 104)"/>
+              <ellipse cx="200" cy="96" rx="8" ry="4.5" fill="#f6e3bd"/>
+              <path d="M46,368 L354,368 L354,392 C354,420 322,436 286,436
+                       L114,436 C78,436 46,420 46,392 Z" fill="#c9822c"/>
+              <rect x="46" y="368" width="308" height="11" rx="5" fill="#e8a33d"/>
+            </g>
+
+            <g class="layer" data-i="6" style="color:#f4e3b8">
+              <path d="M48,156 L352,156 L352,170 C324,186 300,164 272,178
+                       C244,192 220,168 192,180 C164,192 138,168 110,180
+                       C84,191 66,172 48,178 Z" fill="#f4e3b8"/>
+              <path d="M48,156 L352,156 L352,164 C324,174 300,158 272,168
+                       C244,178 220,160 192,170 C164,180 138,160 110,170
+                       C84,179 66,164 48,168 Z" fill="#fdf6e0" opacity=".85"/>
+            </g>
+
+            <g class="layer" data-i="2" style="color:#ffd93d">
+              <rect x="46" y="184" width="308" height="20" rx="5" fill="#ffd93d"/>
+              <path d="M84,204 L104,204 L94,226 Z"  fill="#f7c518"/>
+              <path d="M162,204 L186,204 L174,232 Z" fill="#f7c518"/>
+              <path d="M248,204 L268,204 L258,228 Z" fill="#f7c518"/>
+              <path d="M312,204 L330,204 L321,222 Z" fill="#f7c518"/>
+              <rect x="46" y="184" width="308" height="6" rx="3" fill="#ffe98a" opacity=".65"/>
+            </g>
+
+            <g class="layer" data-i="1" style="color:#ff5b1f">
+              <rect x="42" y="212" width="316" height="58" rx="26" fill="#5b2f18"/>
+              <rect x="42" y="212" width="316" height="24" rx="12" fill="#7a4222"/>
+              <circle cx="104" cy="242" r="4"  fill="#3d1d0c" opacity=".8"/>
+              <circle cx="168" cy="252" r="3.4" fill="#3d1d0c" opacity=".8"/>
+              <circle cx="232" cy="236" r="4.4" fill="#3d1d0c" opacity=".8"/>
+              <circle cx="296" cy="250" r="3.6" fill="#3d1d0c" opacity=".8"/>
+              <circle cx="140" cy="228" r="3" fill="#8a4d28" opacity=".7"/>
+              <circle cx="266" cy="258" r="3" fill="#8a4d28" opacity=".7"/>
+            </g>
+
+            <g class="layer" data-i="5" style="color:#e5453a">
+              <circle cx="112" cy="288" r="30" fill="#e5453a"/>
+              <circle cx="112" cy="288" r="20" fill="#f4776b" opacity=".8"/>
+              <circle cx="200" cy="288" r="30" fill="#e5453a"/>
+              <circle cx="200" cy="288" r="20" fill="#f4776b" opacity=".8"/>
+              <circle cx="288" cy="288" r="30" fill="#e5453a"/>
+              <circle cx="288" cy="288" r="20" fill="#f4776b" opacity=".8"/>
+            </g>
+
+            <g class="layer" data-i="4" style="color:#c58ad6">
+              <ellipse cx="130" cy="316" rx="52" ry="11" fill="none" stroke="#c58ad6" stroke-width="6"/>
+              <ellipse cx="130" cy="316" rx="34" ry="7"  fill="none" stroke="#e0b5ec" stroke-width="4"/>
+              <ellipse cx="268" cy="316" rx="52" ry="11" fill="none" stroke="#c58ad6" stroke-width="6"/>
+              <ellipse cx="268" cy="316" rx="34" ry="7"  fill="none" stroke="#e0b5ec" stroke-width="4"/>
+            </g>
+
+            <g class="layer" data-i="3" style="color:#8fe36a">
+              <path d="M44,332 C70,312 96,350 122,328 C148,306 172,346 200,328
+                       C228,310 252,350 278,328 C304,306 330,344 358,332
+                       L358,360 C330,378 304,352 278,372 C252,390 228,356 200,374
+                       C172,392 148,354 122,372 C96,390 70,354 44,362 Z" fill="#6bc94f"/>
+              <path d="M44,332 C70,312 96,350 122,328 C148,306 172,346 200,328
+                       C228,310 252,350 278,328 C304,306 330,344 358,332
+                       L358,346 C330,360 304,336 278,354 C252,370 228,340 200,356
+                       C172,372 148,338 122,354 C96,370 70,338 44,346 Z" fill="#8fe36a"/>
+            </g>
+
+            <g class="hots" id="hots">
+              <g class="hot2" data-i="0"><circle class="pulse" cx="376" cy="86"  r="9"/><circle class="core2" cx="376" cy="86"  r="3"/></g>
+              <g class="hot2" data-i="6"><circle class="pulse" cx="376" cy="166" r="9"/><circle class="core2" cx="376" cy="166" r="3"/></g>
+              <g class="hot2" data-i="2"><circle class="pulse" cx="376" cy="194" r="9"/><circle class="core2" cx="376" cy="194" r="3"/></g>
+              <g class="hot2" data-i="1"><circle class="pulse" cx="376" cy="241" r="9"/><circle class="core2" cx="376" cy="241" r="3"/></g>
+              <g class="hot2" data-i="5"><circle class="pulse" cx="376" cy="288" r="9"/><circle class="core2" cx="376" cy="288" r="3"/></g>
+              <g class="hot2" data-i="4"><circle class="pulse" cx="376" cy="316" r="9"/><circle class="core2" cx="376" cy="316" r="3"/></g>
+              <g class="hot2" data-i="3"><circle class="pulse" cx="376" cy="350" r="9"/><circle class="core2" cx="376" cy="350" r="3"/></g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="detail" id="detail">
+          <div class="prompt" id="dPrompt">
+            <b>▸</b> Tap a layer<br>
+            Bun · Patty · Cheese · Lettuce<br>
+            Onion · Tomato · Sauce<br>
+            Seven pieces. 573 kcal. No drama.
+          </div>
+          <div class="dcard" id="dCard">
+            <div class="part" id="dPart"></div>
+            <div class="macro2" id="dMacro"></div>
+            <div class="role2" id="dRole"></div>
+            <div class="stats2">
+              <div><span>WEIGHT</span><b id="dG"></b></div>
+              <div><span>ENERGY</span><b id="dK"></b></div>
+              <div><span>P · C · F</span><b id="dPcf" style="font-size:1.05rem"></b></div>
+            </div>
+            <div class="dens">
+              <div class="lab2"><span id="dDlab"></span><span>SCALE · 9 KCAL/G</span></div>
+              <div class="trk"><div class="fl" id="dFill"></div></div>
+            </div>
+            <div style="margin-top:24px" class="ui">
+              <button class="btn" id="dLog">Log this layer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kicker">
+        The 22 g of sauce costs more than the 80 g patty. <b>170 VS 156 KCAL</b>
+        &nbsp;— still not a moral failing.
+      </div>
+  </section>
+
+  <!-- ══ SCENE 07 : EQUATION ══ -->
+  <section id="s5" data-scene="SC 07 — THE RULE">
+    <h2 class="eq" id="eq">DON'T TRY TO EAT LESS. TRY TO EAT RIGHT.</h2>
+  </section>
+
+  <!-- ══ SCENE 08 : CTA ══ -->
+  <section id="s6" data-scene="SC 08 — CUT">
+    <div class="tagline rv">08 — Roll camera</div>
+    <h2 class="scramble rv" data-final="START YOUR ENGINE."
+        style="font-size:clamp(2.2rem,7.5vw,6.6rem)"></h2>
+    <div class="magwrap ui" id="magWrap">
+      <svg class="tach" viewBox="0 0 300 300" aria-hidden="true">
+        <circle class="trk" cx="150" cy="150" r="140"/>
+        <circle class="ndl" id="tachNdl" cx="150" cy="150" r="140"/>
+      </svg>
+      <button class="mag" id="mag" data-cursor="BUILD">BUILD<br>YOUR&nbsp;PLATE</button>
+      <div class="redline" id="redline">▲ REDLINE · 7200 RPM</div>
+    </div>
+    <blockquote class="twain rv">
+      <p>“The secret of getting ahead is getting started.”</p>
+      <cite>— Mark Twain</cite>
+    </blockquote>
+  </section>
+
+  <!-- ══ SCENE 09 : THE DEALER ══ -->
+  <section id="deal" data-scene="SC 09 — WHAT'S LEFT">
+    <div class="cap">
+      <div>
+        <div class="tagline">09 — The 6pm question</div>
+        <h2>SO WHAT CAN I<br>ACTUALLY EAT?</h2>
+        <div class="lede">Tell it how many calories you've got left. It deals you a real plate
+          from the whole menu — nothing over budget, nothing you have to think about.</div>
+      </div>
+      <div class="tagline" style="max-width:250px;line-height:2">Pull the lever.<br>Log it or deal again.</div>
+    </div>
+
+    <div class="dealbar ui">
+      <label class="budget"><span>Calories left</span>
+        <input id="dealKc" type="number" value="600" min="50" max="4000" step="10"></label>
+      <div class="slotpick">
+        <button class="spick on" data-slot="any">Any time</button>
+        <button class="spick" data-slot="breakfast">Breakfast</button>
+        <button class="spick" data-slot="lunch">Lunch</button>
+        <button class="spick" data-slot="high tea">Snack</button>
+        <button class="spick" data-slot="dinner">Dinner</button>
+      </div>
+    </div>
+
+    <div class="reel" id="reel">
+      <div class="waiting">Nothing dealt yet. Set your number, pick a moment in the day,
+        and pull the lever — it'll find a combination that fits without going over.</div>
+    </div>
+
+    <div class="dealacts ui">
+      <button class="btn solid" id="dealBtn">Deal me a plate</button>
+      <button class="btn ghost" id="dealLog" disabled>Log this plate</button>
+      <button class="btn ghost" id="dealFill">Use what's left today</button>
+    </div>
+    <div id="dealMsg"></div>
+  </section>
+
+  <div class="endcard">EAT<br>WELL.<small>MAPO · 2026 · no starvation vibes allowed</small></div>
+
+</main>
+
+
+<script>
+/* dishes.json is fetched, so the page must be served over http:// — not opened
+   as a file://.  `python3 -m http.server 5173` is enough.  (standalone.html has
+   everything inlined if you need a file you can just double-click.) */
+fetch('data/dishes.json')
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => {
+    window.__MAPO_DISHES__ = d;
+    const s = document.createElement('script');
+    s.src = 'app.js';
+    document.body.appendChild(s);
+  })
+  .catch(err => {
+    document.getElementById('pre').innerHTML =
+      '<div style="padding:6vw;font-family:monospace;color:#ff5b1f;line-height:2">' +
+      'COULD NOT LOAD data/dishes.json (' + err.message + ')<br><br>' +
+      'This page must be served over http, not opened as a file.<br>' +
+      'Run:&nbsp; python3 -m http.server 5173 &nbsp;then open localhost:5173<br>' +
+      'Or open standalone.html, which needs no server.</div>';
+  });
+</script>
+</body>
+</html>

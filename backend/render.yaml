@@ -1,0 +1,58 @@
+# Render blueprint for the MAPO backend (free tier).
+#
+# Free plan notes:
+#   * The service spins down after 15 minutes with no traffic and takes about
+#     a minute to wake up. That is expected on the free plan.
+#   * 750 instance hours per month across the workspace.
+#
+# Secrets are NOT stored here. Every `sync: false` value must be entered in the
+# Render dashboard under Environment. Never commit real secrets to this file.
+services:
+  - type: web
+    name: mapo-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.15"
+
+      - key: ENVIRONMENT
+        value: production
+
+      # Must be 32+ characters or the API refuses to start.
+      # Generate a NEW one for production: openssl rand -hex 32
+      - key: JWT_SECRET
+        sync: false
+
+      # MongoDB Atlas M0 connection string (free tier).
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: mapo
+
+      # Your Vercel frontend URL. Comma-separated, no wildcards.
+      # e.g. https://mapo.vercel.app
+      - key: CORS_ORIGINS
+        sync: false
+
+      # Render terminates TLS at its proxy and sets X-Forwarded-For,
+      # so the rate limiter should read the real client IP from it.
+      - key: TRUST_PROXY_HEADERS
+        value: "1"
+
+      - key: GROQ_API_KEY
+        sync: false
+
+      # OAuth 2.0 Web Client ID from Google Cloud Console.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+
+      - key: ADMIN_EMAIL
+        sync: false
+      # 12+ characters or admin seeding is skipped.
+      - key: ADMIN_PASSWORD
+        sync: false

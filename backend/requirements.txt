@@ -1,0 +1,29 @@
+# MAPO backend — direct dependencies only.
+# Transitive packages (starlette, numpy, anyio, certifi, ...) are resolved by pip.
+
+# Web framework
+fastapi==0.110.1
+uvicorn[standard]==0.25.0
+pydantic==2.13.4
+email-validator==2.3.0
+python-multipart==0.0.32
+
+# Database
+motor==3.3.1
+pymongo==4.6.3
+
+# Auth
+bcrypt==4.1.3
+PyJWT==2.13.0
+
+# HTTP client (Google session validation)
+httpx==0.28.1
+
+# Data / nutrition engine
+pandas==3.0.5
+
+# LLM provider (nutrition lookups + AI coach)
+groq==1.6.0
+
+# Config
+python-dotenv==1.2.3
